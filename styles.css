@@ -26,17 +26,17 @@ body {
 
 .paddle {
   position: absolute;
-  width: 100px;
-  height: 20px;
-  background-color: white;
+  width: 80px;
+  height: 100px;
+  /* background-color: white; */
 }
 
 #topPaddle {
-  top: 20px;
+  top: 100px;
 }
 
 #bottomPaddle {
-  bottom: 20px;
+  bottom: 100px;
 }
 .swinging {
   background-color: red;

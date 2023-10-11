@@ -1,6 +1,6 @@
 //CONSTANTS
-const PADDLE_WIDTH = 100;
-const PADDLE_HEIGHT = 20;
+const PADDLE_WIDTH = 80;
+const PADDLE_HEIGHT = 100;
 
 const COLLISION_SQUARE = 20;
 const PADDLE_COLLISION_COOLDOWN = 200; // 200 ms
@@ -12,6 +12,11 @@ const RIGHT_WALL = 400;
 const TOP_WALL = 0;
 const BOTTOM_WALL = 800;
 const CENTER_LINE = BOTTOM_WALL / 2;
+const RESET_BUTTON = document.getElementById("resetButton");
+
+RESET_BUTTON.addEventListener("click", function () {
+  initializeGame();
+});
 
 //GAME VARIABLES
 let paddleSpeed = 10;
@@ -23,8 +28,8 @@ const pong = document.querySelector(".pong");
 
 let topPaddleX = 150;
 let bottomPaddleX = 150;
-let topPaddleY = 20;
-let bottomPaddleY = 760;
+let topPaddleY = 100;
+let bottomPaddleY = 700;
 
 let topPaddleSwinging = false;
 let topPaddleSwingDuration = 0; // Time the swing state has been active (in milliseconds)
@@ -39,6 +44,30 @@ let ballY = 390;
 let ballSpeedX = 2; //2
 let ballSpeedY = 5; //5
 
+//Restart Game
+function initializeGame() {
+  //TopPaddle
+  topPaddleX = 150;
+  topPaddleY = 100;
+  topPaddleSwinging = false;
+  topPaddleSwingDuration = 0;
+  topPaddleCooldownActive = false;
+  //bottomPaddle
+  bottomPaddleX = 150;
+  bottomPaddleY = 700;
+  bottomPaddleSwinging = false;
+  bottomPaddleSwingDuration = 0;
+  bottomPaddleCooldownActive = false;
+
+  //Ball
+  ballX = 190;
+  ballY = 390;
+  ballSpeedX = 2;
+  ballSpeedY = 5;
+  bottomPaddlePoints = 0;
+  topPaddlePoints = 0;
+  gameState = GameState.SERVING;
+}
 //SERVING STATE
 let server = "top";
 
@@ -47,28 +76,10 @@ let topPaddlePoints = 0;
 let bottomPaddlePoints = 0;
 
 //KEYBOARD EVENTS
-const keys = {}; // Object to store pressed keys
-
-//Handle User Swing
+const keys = {};
 document.addEventListener("keydown", function (event) {
-  if (
-    event.key === " " &&
-    !topPaddleSwinging &&
-    gameState === GameState.IN_PLAY
-  ) {
-    topPaddleSwinging = true;
-  }
-  if (
-    event.key.toLowerCase() === "n" &&
-    !bottomPaddleSwinging &&
-    gameState === GameState.IN_PLAY
-  ) {
-    bottomPaddleSwinging = true;
-  }
-
   keys[event.key] = true;
 });
-
 document.addEventListener("keyup", function (event) {
   keys[event.key] = false;
 });
@@ -105,8 +116,13 @@ function serve_handlePaddles() {
 }
 
 function serve_updateBall() {
-  ballX = bottomPaddleX + 40;
-  ballY = bottomPaddleY - (PADDLE_HEIGHT - 5);
+  if (server === "bottom") {
+    ballX = bottomPaddleX + 40;
+    ballY = bottomPaddleY + 50;
+  } else {
+    ballX = topPaddleX + 40;
+    ballY = topPaddleY + 50;
+  }
 }
 
 //PLAYING FUNCTIONS
@@ -188,8 +204,8 @@ function handleCollisions() {
   if (ballY < 0) {
     ballX = topPaddleX + 40;
     ballY = topPaddleY + (PADDLE_HEIGHT - 5);
-    ballSpeedX = 0; //2;
-    ballSpeedY = 0; //-5; // Change the initial direction if you prefer
+    ballSpeedX = 2; //2;
+    ballSpeedY = -5; //5; // Change the initial direction if you prefer
     gameState = GameState.SERVING;
     server = "top";
   }
@@ -197,8 +213,8 @@ function handleCollisions() {
   if (ballY >= 790) {
     ballX = bottomPaddleX + 40;
     ballY = bottomPaddleY - (PADDLE_HEIGHT - 5);
-    ballSpeedX = 0; //2;
-    ballSpeedY = 0; //-5; // Change the initial direction if you prefer
+    ballSpeedX = 2; //2;
+    ballSpeedY = 5; //-5; // Change the initial direction if you prefer
     gameState = GameState.SERVING;
     server = "bottom";
   }
@@ -250,6 +266,14 @@ function topPlayerMovement() {
   if (keys["s"] && topPaddleY < CENTER_LINE - PADDLE_HEIGHT) {
     topPaddleY += paddleSpeed;
   }
+
+  if (keys[" "] && !topPaddleSwinging && gameState === GameState.IN_PLAY) {
+    topPaddleSwinging = true;
+  }
+
+  if (keys[" "] && gameState === GameState.SERVING && server === "top") {
+    gameState = GameState.IN_PLAY;
+  }
 }
 function bottomPlayerMovement() {
   //BOTTOM PLAYER KEYS
@@ -266,6 +290,14 @@ function bottomPlayerMovement() {
   }
   if (keys["ArrowDown"] && bottomPaddleY < BOTTOM_WALL - PADDLE_HEIGHT) {
     bottomPaddleY += paddleSpeed;
+  }
+
+  if (keys["n"] && !bottomPaddleSwinging && gameState === GameState.IN_PLAY) {
+    bottomPaddleSwinging = true;
+  }
+
+  if (keys["n"] && gameState === GameState.SERVING && server === "bottom") {
+    gameState = GameState.IN_PLAY;
   }
 }
 
