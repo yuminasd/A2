@@ -12,19 +12,21 @@ const RIGHT_WALL = 400;
 const TOP_WALL = 0;
 const BOTTOM_WALL = 800;
 const CENTER_LINE = BOTTOM_WALL / 2;
-const RESET_BUTTON = document.getElementById("resetButton");
 
-RESET_BUTTON.addEventListener("click", function () {
-  initializeGame();
-});
-
-//GAME VARIABLES
-let paddleSpeed = 10;
-
+const menu = document.querySelector(".gameOver");
 const topPaddle = document.getElementById("topPaddle");
 const bottomPaddle = document.getElementById("bottomPaddle");
 const ball = document.querySelector(".ball");
 const pong = document.querySelector(".pong");
+
+const START_GANE = document.getElementById("startGame");
+START_GANE.addEventListener("click", function () {
+  pong.style.visibility = "visible";
+  menu.style.visibility = "hidden";
+  initializeGame();
+});
+//GAME VARIABLES
+let paddleSpeed = 10;
 
 let topPaddleX = 150;
 let bottomPaddleX = 150;
@@ -32,17 +34,17 @@ let topPaddleY = 100;
 let bottomPaddleY = 700;
 
 let topPaddleSwinging = false;
-let topPaddleSwingDuration = 0; // Time the swing state has been active (in milliseconds)
+let topPaddleSwingDuration = 200; // Time the swing state has been active (in milliseconds)
 let topPaddleCooldownActive = false; // Flag to track if the paddle collision cooldown is active
 
 let bottomPaddleSwinging = false;
-let bottomPaddleSwingDuration = 0; // Time the swing state has been active (in milliseconds)
+let bottomPaddleSwingDuration = 200; // Time the swing state has been active (in milliseconds)
 let bottomPaddleCooldownActive = false; // Flag to track if the paddle collision cooldown is active
 
 let ballX = 190;
 let ballY = 390;
 let ballSpeedX = 2; //2
-let ballSpeedY = 5; //5
+let ballSpeedY = -5; //5
 
 //Restart Game
 function initializeGame() {
@@ -67,6 +69,10 @@ function initializeGame() {
   bottomPaddlePoints = 0;
   topPaddlePoints = 0;
   gameState = GameState.SERVING;
+  server = "bottom";
+  document.getElementById("topPaddlePoints").textContent = topPaddlePoints;
+  document.getElementById("bottomPaddlePoints").textContent =
+    bottomPaddlePoints;
 }
 //SERVING STATE
 let server = "top";
@@ -91,7 +97,7 @@ const GameState = {
   GAME_OVER: "gameOver",
 };
 
-let gameState = GameState.IN_PLAY; // Initial game state is serving
+let gameState = GameState.GAME_OVER; // Initial game state is serving
 
 function handleServingState() {
   serve_handlePaddles();
@@ -99,8 +105,7 @@ function handleServingState() {
 }
 
 function handleGameOverState() {
-  // Logic for game over state
-  // ...
+  //Literally can't do anything except click Start Game :) This is intended
 }
 
 function handleInPlayState() {
@@ -192,14 +197,6 @@ function handleCollisions() {
       }, PADDLE_COLLISION_COOLDOWN);
     }
   }
-  // Reset ball position if it goes out of the screen horizontally and update scores
-  if (ballY <= 0) {
-    topPaddlePoints++;
-    updateScores();
-  } else if (ballY >= 790) {
-    bottomPaddlePoints++;
-    updateScores();
-  }
 
   if (ballY < 0) {
     ballX = topPaddleX + 40;
@@ -208,6 +205,8 @@ function handleCollisions() {
     ballSpeedY = -5; //5; // Change the initial direction if you prefer
     gameState = GameState.SERVING;
     server = "top";
+    topPaddlePoints++;
+    updateScores();
   }
 
   if (ballY >= 790) {
@@ -217,6 +216,8 @@ function handleCollisions() {
     ballSpeedY = 5; //-5; // Change the initial direction if you prefer
     gameState = GameState.SERVING;
     server = "bottom";
+    bottomPaddlePoints++;
+    updateScores();
   }
 }
 
@@ -224,6 +225,17 @@ function updateScores() {
   document.getElementById("topPaddlePoints").textContent = topPaddlePoints;
   document.getElementById("bottomPaddlePoints").textContent =
     bottomPaddlePoints;
+
+  if (bottomPaddlePoints === 5) {
+    gameState = GameState.GAME_OVER;
+    pong.style.visibility = "hidden";
+    menu.style.visibility = "visible";
+  }
+  if (topPaddlePoints === 5) {
+    gameState = GameState.GAME_OVER;
+    pong.style.visibility = "hidden";
+    menu.style.visibility = "visible";
+  }
 }
 
 //CHECKS COLLISION WITH THE PADDLES

@@ -8,6 +8,7 @@
   </head>
 
   <body>
+    <!-- Gameplay Scene -->
     <div class="pong">
       <div class="centerLine"></div>
       <div class="score">
@@ -21,9 +22,18 @@
         <img src="./assets/imp.png" />
       </div>
       <div class="ball"></div>
-      <button id="resetButton">Reset</button>
+      <!-- <button id="resetButton">Reset</button> -->
     </div>
-    <!-- Include your JavaScript files -->
+
+    <!--GameOver Scene-->
+    <div class="gameOver">
+      <img style="width: 20rem" src="./assets/title.png" alt="Hot Potato" />
+      <button id="startGame">Start Game</button>
+      <div style="position: absolute; bottom: 2rem; color: #777">
+        Created By: Jia-Gang Chang, Assets: Daniel Kim
+      </div>
+    </div>
+
     <script src="./script.js"></script>
   </body>
 </html>
