@@ -3,7 +3,7 @@ const PADDLE_WIDTH = 80;
 const PADDLE_HEIGHT = 100;
 
 const COLLISION_SQUARE = 20;
-const PADDLE_COLLISION_COOLDOWN = 200; // 200 ms
+const PADDLE_COLLISION_COOLDOWN = 800; // 200 ms
 
 const BALL_SIZE = 20;
 
@@ -19,8 +19,8 @@ const bottomPaddle = document.getElementById("bottomPaddle");
 const ball = document.querySelector(".ball");
 const pong = document.querySelector(".pong");
 
-const START_GANE = document.getElementById("startGame");
-START_GANE.addEventListener("click", function () {
+const START_GAME = document.getElementById("startGame");
+START_GAME.addEventListener("click", function () {
   pong.style.visibility = "visible";
   menu.style.visibility = "hidden";
   initializeGame();
@@ -34,17 +34,17 @@ let topPaddleY = 100;
 let bottomPaddleY = 700;
 
 let topPaddleSwinging = false;
-let topPaddleSwingDuration = 200; // Time the swing state has been active (in milliseconds)
+let topPaddleSwingDuration = 100; // Time the swing state has been active (in milliseconds)
 let topPaddleCooldownActive = false; // Flag to track if the paddle collision cooldown is active
 
 let bottomPaddleSwinging = false;
-let bottomPaddleSwingDuration = 200; // Time the swing state has been active (in milliseconds)
+let bottomPaddleSwingDuration = 100; // Time the swing state has been active (in milliseconds)
 let bottomPaddleCooldownActive = false; // Flag to track if the paddle collision cooldown is active
 
 let ballX = 190;
 let ballY = 390;
 let ballSpeedX = 2; //2
-let ballSpeedY = -5; //5
+let ballSpeedY = 5; //5
 
 //Restart Game
 function initializeGame() {
@@ -52,13 +52,13 @@ function initializeGame() {
   topPaddleX = 150;
   topPaddleY = 100;
   topPaddleSwinging = false;
-  topPaddleSwingDuration = 0;
+  topPaddleSwingDuration = 500;
   topPaddleCooldownActive = false;
   //bottomPaddle
   bottomPaddleX = 150;
   bottomPaddleY = 700;
   bottomPaddleSwinging = false;
-  bottomPaddleSwingDuration = 0;
+  bottomPaddleSwingDuration = 200;
   bottomPaddleCooldownActive = false;
 
   //Ball
@@ -75,7 +75,7 @@ function initializeGame() {
     bottomPaddlePoints;
 }
 //SERVING STATE
-let server = "top";
+let server = "bottom";
 
 //POINTS SYSTEM
 let topPaddlePoints = 0;
@@ -181,6 +181,7 @@ function handleCollisions() {
       // Ball speed increases when colliding with a swinging paddle
       ballSpeedY = -ballSpeedY * 1.1;
       topPaddleCooldownActive = true;
+
       setTimeout(() => {
         topPaddleCooldownActive = false; // Deactivate the paddle collision cooldown after 200 milliseconds
       }, PADDLE_COLLISION_COOLDOWN);
