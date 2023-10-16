@@ -18,11 +18,15 @@ const topPaddle = document.getElementById("topPaddle");
 const bottomPaddle = document.getElementById("bottomPaddle");
 const ball = document.querySelector(".ball");
 const pong = document.querySelector(".pong");
+const controlsList = document.querySelectorAll(".controls");
 
 const START_GAME = document.getElementById("startGame");
 START_GAME.addEventListener("click", function () {
   pong.style.display = "block";
   menu.style.display = "none";
+  controlsList.forEach(function (controlElement) {
+    controlElement.style.visibility = "visible";
+  });
   initializeGame();
 });
 //GAME VARIABLES
@@ -126,8 +130,8 @@ function serve_updateBall() {
     ballX = bottomPaddleX + 20;
     ballY = bottomPaddleY + 30;
   } else {
-    ballX = topPaddleX + 40;
-    ballY = topPaddleY + 50;
+    ballX = topPaddleX + 20;
+    ballY = topPaddleY + 30;
   }
 }
 
@@ -232,11 +236,19 @@ function updateScores() {
     gameState = GameState.GAME_OVER;
     pong.style.display = "none";
     menu.style.display = "block";
+
+    controlsList.forEach(function (controlElement) {
+      controlElement.style.visibility = "hidden";
+    });
   }
   if (topPaddlePoints === 5) {
     gameState = GameState.GAME_OVER;
     pong.style.display = "none";
     menu.style.display = "block";
+
+    controlsList.forEach(function (controlElement) {
+      controlElement.style.visibility = "hidden";
+    });
   }
 }
 
