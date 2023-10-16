@@ -4,8 +4,6 @@ Assignment 12
 Name: Jia-Gang Chang
 UCID: 30046735
 
-### Title:
-
 # Hot Potato
 
 ### Target Platform:
@@ -18,6 +16,7 @@ Sports/Dodgeball
 
 ### Game Objective:
 
+asd
 Reach 10 points to win the game.
 
 ## Rules of the Game:
@@ -32,11 +31,13 @@ Hot Potato is a game of dodgeball, players must hit each other with the ball to 
 
 ## Player Controls:
 
-Top Player:
+### Top Player:
+
 WASD to move
 Spacebar to shoot
 
-Bottom Player:
+### Bottom Player:
+
 Arrow Keys to move
 "n" to shoot
 
@@ -48,7 +49,7 @@ To allow for Mobile users can press the buttons to control the character
 
   - Serving, the players can move anywhere one the map. However one player holds the ball, the player can press shoot to start the play
   - In Play, the ball is live and bounces on all the walls
-    -Game Over, the menu screen (not really a mechanic)
+  - Game Over, the menu screen (not really a mechanic)
 
 - Game has an interactive ball:
 

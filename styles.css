@@ -71,5 +71,21 @@ h1 {
   color: white;
 }
 
-.topPaddlePoints {
+.controls {
+  background-image: url(./assets/keyboard.png);
+  background-size: 300px;
+  width: 300px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+}
+button {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  font-size: 10px;
+  color: white;
+}
+
+button:active {
+  color: rgba(255, 255, 255, 0.5);
 }
