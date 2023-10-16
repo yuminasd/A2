@@ -1,33 +1,30 @@
 body {
   overflow: hidden;
   height: 100vh;
+  width: 100vw;
   margin: 0;
   background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Add this line to center horizontally */
 }
 
 .pong {
-  visibility: hidden;
+  display: none;
   position: relative;
-  width: 400px;
-  height: 800px;
-  /* background-color: #222;
-} */
-}
-
-.centerLine {
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background-color: white;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  width: 300px;
+  height: 600px;
 }
 
 .paddle {
   position: absolute;
-  width: 80px;
-  height: 100px;
+  width: 50px;
+  height: 70px;
+}
+
+.paddle img {
+  width: 50px;
 }
 
 #topPaddle {
@@ -54,15 +51,15 @@ body {
   color: white;
   text-align: center;
   margin-bottom: 20px;
+  position: absolute;
+  top: 50%;
+  width: 100%;
 }
 
 .gameOver {
-  top: 0;
-  left: 0;
-  visibility: visible;
-  position: absolute;
-  width: 400px;
-  height: 800px;
+  display: block;
+  width: 300px;
+  height: 600px;
   background-color: #222;
   display: flex;
   flex-direction: column;
@@ -72,4 +69,7 @@ body {
 
 h1 {
   color: white;
+}
+
+.topPaddlePoints {
 }

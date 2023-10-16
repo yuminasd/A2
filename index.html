@@ -4,20 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles.css" />
-    <title>Pong Game</title>
+    <title>Hot Potato</title>
   </head>
 
   <body>
+    <div style="width: 100%; display: flex; justify-content: center">
+      <button style="width: 50px; height: 50px">Up</button>
+      <button style="width: 50px; height: 50px">Down</button>
+      <button style="width: 50px; height: 50px">Left</button>
+      <button style="width: 50px; height: 50px">Right</button>
+      <button style="width: 50px; height: 50px">Shoot</button>
+    </div>
     <!-- Gameplay Scene -->
     <div class="pong">
       <img
         style="position: absolute; width: 100%; z-index: -10"
-        src="./assets/background2.png"
+        src="./assets/background.png"
       />
-      <div class="centerLine"></div>
+
       <div class="score">
-        <span id="topPaddlePoints">0</span> -
-        <span id="bottomPaddlePoints">0</span>
+        <span class="topPaddlePoints" id="topPaddlePoints">0</span> -
+        <span class="bottomPaddlePoints" id="bottomPaddlePoints">0</span>
       </div>
       <div class="paddle" id="topPaddle">
         <img src="./assets/imp.png" />
@@ -26,16 +33,20 @@
         <img src="./assets/imp.png" />
       </div>
       <div class="ball"></div>
-      <!-- <button id="resetButton">Reset</button> -->
     </div>
 
     <!--GameOver Scene-->
     <div class="gameOver">
-      <img style="width: 20rem" src="./assets/title.png" alt="Hot Potato" />
+      <img style="width: 15rem" src="./assets/title.png" alt="Hot Potato" />
       <button id="startGame">Start Game</button>
-      <div style="position: absolute; bottom: 2rem; color: #777">
-        Created By: Jia-Gang Chang, Assets: Daniel Kim
-      </div>
+    </div>
+
+    <div style="width: 100%; display: flex; justify-content: center">
+      <button style="width: 50px; height: 50px">Up</button>
+      <button style="width: 50px; height: 50px">Down</button>
+      <button style="width: 50px; height: 50px">Left</button>
+      <button style="width: 50px; height: 50px">Right</button>
+      <button style="width: 50px; height: 50px">Shoot</button>
     </div>
 
     <script src="./script.js"></script>

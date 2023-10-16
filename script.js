@@ -1,16 +1,16 @@
 //CONSTANTS
-const PADDLE_WIDTH = 80;
-const PADDLE_HEIGHT = 100;
+const PADDLE_WIDTH = 50;
+const PADDLE_HEIGHT = 70;
 
 const COLLISION_SQUARE = 20;
 const PADDLE_COLLISION_COOLDOWN = 800; // 200 ms
 
-const BALL_SIZE = 20;
+const BALL_SIZE = 10;
 
 const LEFT_WALL = 0;
-const RIGHT_WALL = 400;
+const RIGHT_WALL = 300;
 const TOP_WALL = 0;
-const BOTTOM_WALL = 800;
+const BOTTOM_WALL = 600;
 const CENTER_LINE = BOTTOM_WALL / 2;
 
 const menu = document.querySelector(".gameOver");
@@ -21,33 +21,34 @@ const pong = document.querySelector(".pong");
 
 const START_GAME = document.getElementById("startGame");
 START_GAME.addEventListener("click", function () {
-  pong.style.visibility = "visible";
-  menu.style.visibility = "hidden";
+  pong.style.display = "block";
+  menu.style.display = "none";
   initializeGame();
 });
 //GAME VARIABLES
-let paddleSpeed = 10;
+let paddleSpeed;
 
-let topPaddleX = 150;
-let bottomPaddleX = 150;
-let topPaddleY = 100;
-let bottomPaddleY = 700;
+let topPaddleX;
+let bottomPaddleX;
+let topPaddleY;
+let bottomPaddleY;
 
-let topPaddleSwinging = false;
-let topPaddleSwingDuration = 100; // Time the swing state has been active (in milliseconds)
-let topPaddleCooldownActive = false; // Flag to track if the paddle collision cooldown is active
+let topPaddleSwinging;
+let topPaddleSwingDuration; // Time the swing state has been active (in milliseconds)
+let topPaddleCooldownActive; // Flag to track if the paddle collision cooldown is active
 
-let bottomPaddleSwinging = false;
-let bottomPaddleSwingDuration = 100; // Time the swing state has been active (in milliseconds)
-let bottomPaddleCooldownActive = false; // Flag to track if the paddle collision cooldown is active
+let bottomPaddleSwinging;
+let bottomPaddleSwingDuration; // Time the swing state has been active (in milliseconds)
+let bottomPaddleCooldownActive; // Flag to track if the paddle collision cooldown is active
 
-let ballX = 190;
-let ballY = 390;
-let ballSpeedX = 2; //2
-let ballSpeedY = 5; //5
+let ballX;
+let ballY;
+let ballSpeedX;
+let ballSpeedY;
 
 //Restart Game
 function initializeGame() {
+  paddleSpeed = 10;
   //TopPaddle
   topPaddleX = 150;
   topPaddleY = 100;
@@ -56,7 +57,7 @@ function initializeGame() {
   topPaddleCooldownActive = false;
   //bottomPaddle
   bottomPaddleX = 150;
-  bottomPaddleY = 700;
+  bottomPaddleY = 500;
   bottomPaddleSwinging = false;
   bottomPaddleSwingDuration = 200;
   bottomPaddleCooldownActive = false;
@@ -122,8 +123,8 @@ function serve_handlePaddles() {
 
 function serve_updateBall() {
   if (server === "bottom") {
-    ballX = bottomPaddleX + 40;
-    ballY = bottomPaddleY + 50;
+    ballX = bottomPaddleX + 20;
+    ballY = bottomPaddleY + 30;
   } else {
     ballX = topPaddleX + 40;
     ballY = topPaddleY + 50;
@@ -199,7 +200,7 @@ function handleCollisions() {
     }
   }
 
-  if (ballY < 0) {
+  if (ballY < TOP_WALL) {
     ballX = topPaddleX + 40;
     ballY = topPaddleY + (PADDLE_HEIGHT - 5);
     ballSpeedX = 2; //2;
@@ -210,7 +211,7 @@ function handleCollisions() {
     updateScores();
   }
 
-  if (ballY >= 790) {
+  if (ballY >= BOTTOM_WALL - 10) {
     ballX = bottomPaddleX + 40;
     ballY = bottomPaddleY - (PADDLE_HEIGHT - 5);
     ballSpeedX = 2; //2;
@@ -229,13 +230,13 @@ function updateScores() {
 
   if (bottomPaddlePoints === 5) {
     gameState = GameState.GAME_OVER;
-    pong.style.visibility = "hidden";
-    menu.style.visibility = "visible";
+    pong.style.display = "none";
+    menu.style.display = "block";
   }
   if (topPaddlePoints === 5) {
     gameState = GameState.GAME_OVER;
-    pong.style.visibility = "hidden";
-    menu.style.visibility = "visible";
+    pong.style.display = "none";
+    menu.style.display = "block";
   }
 }
 
