@@ -20,6 +20,18 @@ const ball = document.querySelector(".ball");
 const gameScene = document.querySelector(".gameScene");
 const controlsList = document.querySelectorAll(".controls");
 
+const topShootButton = document.getElementById("topShootButton");
+const topUpButton = document.getElementById("topUpButton");
+const topDownButton = document.getElementById("topDownButton");
+const topLeftButton = document.getElementById("topLeftButton");
+const topRightButton = document.getElementById("topRightButton");
+
+const bottomShootButton = document.getElementById("bottomShootButton");
+const bottomUpButton = document.getElementById("bottomUpButton");
+const bottomDownButton = document.getElementById("bottomDownButton");
+const bottomLeftButton = document.getElementById("bottomLeftButton");
+const bottomRightButton = document.getElementById("bottomRightButton");
+
 const START_GAME = document.getElementById("startGame");
 START_GAME.addEventListener("click", function () {
   gameScene.style.display = "block";
@@ -42,9 +54,21 @@ let topPaddleSwinging;
 let topPaddleSwingDuration; // Time the swing state has been active (in milliseconds)
 let topPaddleCooldownActive; // Flag to track if the paddle collision cooldown is active
 
+let topShootButtonPressed;
+let topUpButtonPressed;
+let topDownButtonPressed;
+let topLeftButtonPressed;
+let topRightButtonPressed;
+
 let bottomPaddleSwinging;
 let bottomPaddleSwingDuration;
 let bottomPaddleCooldownActive;
+
+let bottomShootButtonPressed;
+let bottomUpButtonPressed;
+let bottomDownButtonPressed;
+let bottomLeftButtonPressed;
+let bottomRightButtonPressed;
 
 let ballX;
 let ballY;
@@ -70,14 +94,11 @@ function initializeGame() {
   ballX = 190;
   ballY = 390;
   ballSpeedX = 2;
-  ballSpeedY = 10;
+  ballSpeedY = 5;
   bottomPaddlePoints = 0;
   topPaddlePoints = 0;
   gameState = GameState.SERVING;
   server = "bottom";
-  document.getElementById("topPaddlePoints").textContent = topPaddlePoints;
-  document.getElementById("bottomPaddlePoints").textContent =
-    bottomPaddlePoints;
 }
 //SERVING STATE----------------------------------------------------------------------------------------------
 let server = "bottom";
@@ -85,7 +106,8 @@ let server = "bottom";
 //POINTS SYSTEM----------------------------------------------------------------------------------------------
 let topPaddlePoints = 0;
 let bottomPaddlePoints = 0;
-
+document.getElementById("topPaddlePoints").textContent = topPaddlePoints;
+document.getElementById("bottomPaddlePoints").textContent = bottomPaddlePoints;
 //KEYBOARD EVENTS--------------------------------------------------------------------------------------------
 const keys = {};
 document.addEventListener("keydown", function (event) {
@@ -93,6 +115,77 @@ document.addEventListener("keydown", function (event) {
 });
 document.addEventListener("keyup", function (event) {
   keys[event.key] = false;
+});
+
+//Top Mouse Keys
+topShootButton.addEventListener("mousedown", function () {
+  topShootButtonPressed = true;
+});
+topShootButton.addEventListener("mouseup", function () {
+  topShootButtonPressed = false;
+});
+
+topUpButton.addEventListener("mousedown", function () {
+  topUpButtonPressed = true;
+});
+topUpButton.addEventListener("mouseup", function () {
+  topUpButtonPressed = false;
+});
+
+topDownButton.addEventListener("mousedown", function () {
+  topDownButtonPressed = true;
+});
+topDownButton.addEventListener("mouseup", function () {
+  topDownButtonPressed = false;
+});
+
+topLeftButton.addEventListener("mousedown", function () {
+  topLeftButtonPressed = true;
+});
+topLeftButton.addEventListener("mouseup", function () {
+  topLeftButtonPressed = false;
+});
+
+topRightButton.addEventListener("mousedown", function () {
+  topRightButtonPressed = true;
+});
+topRightButton.addEventListener("mouseup", function () {
+  topRightButtonPressed = false;
+});
+//Bottom Mouse Keys
+bottomShootButton.addEventListener("mousedown", function () {
+  bottomShootButtonPressed = true;
+});
+bottomShootButton.addEventListener("mouseup", function () {
+  bottomShootButtonPressed = false;
+});
+
+bottomUpButton.addEventListener("mousedown", function () {
+  bottomUpButtonPressed = true;
+});
+bottomUpButton.addEventListener("mouseup", function () {
+  bottomUpButtonPressed = false;
+});
+
+bottomDownButton.addEventListener("mousedown", function () {
+  bottomDownButtonPressed = true;
+});
+bottomDownButton.addEventListener("mouseup", function () {
+  bottomDownButtonPressed = false;
+});
+
+bottomLeftButton.addEventListener("mousedown", function () {
+  bottomLeftButtonPressed = true;
+});
+bottomLeftButton.addEventListener("mouseup", function () {
+  bottomLeftButtonPressed = false;
+});
+
+bottomRightButton.addEventListener("mousedown", function () {
+  bottomRightButtonPressed = true;
+});
+bottomRightButton.addEventListener("mouseup", function () {
+  bottomRightButtonPressed = false;
 });
 
 //STATE MANAGER ----------------------------------------------------------------------------------------------
@@ -222,6 +315,7 @@ function handleCollisions() {
   }
   // Ball collision with top and bottom walls
   if (ballY < TOP_WALL) {
+    // ballSpeedY = -ballSpeedY;
     ballX = topPaddleX + 40;
     ballY = topPaddleY + (PADDLE_HEIGHT - 5);
     ballSpeedX = 2;
@@ -233,6 +327,7 @@ function handleCollisions() {
   }
 
   if (ballY >= BOTTOM_WALL - 10) {
+    // ballSpeedY = -ballSpeedY;
     ballX = bottomPaddleX + 40;
     ballY = bottomPaddleY - (PADDLE_HEIGHT - 5);
     ballSpeedX = 2;
@@ -287,49 +382,93 @@ function gameLoop() {
 }
 
 function topPlayerMovement() {
-  if (keys["a"] && topPaddleX > LEFT_WALL) {
+  if (
+    (topRightButtonPressed && topPaddleX > LEFT_WALL) ||
+    (keys["a"] && topPaddleX > LEFT_WALL)
+  ) {
     topPaddleX -= paddleSpeed;
   }
-  if (keys["d"] && topPaddleX < RIGHT_WALL - PADDLE_WIDTH) {
+  if (
+    (topLeftButtonPressed && topPaddleX < RIGHT_WALL - PADDLE_WIDTH) ||
+    (keys["d"] && topPaddleX < RIGHT_WALL - PADDLE_WIDTH)
+  ) {
     topPaddleX += paddleSpeed;
   }
-  if (keys["w"] && topPaddleY > TOP_WALL) {
+  if (
+    (topDownButtonPressed && topPaddleY > TOP_WALL) ||
+    (keys["w"] && topPaddleY > TOP_WALL)
+  ) {
     topPaddleY -= paddleSpeed;
   }
-  if (keys["s"] && topPaddleY < CENTER_LINE - PADDLE_HEIGHT) {
+  if (
+    (topUpButtonPressed && topPaddleY < CENTER_LINE - PADDLE_HEIGHT) ||
+    (keys["s"] && topPaddleY < CENTER_LINE - PADDLE_HEIGHT)
+  ) {
     topPaddleY += paddleSpeed;
   }
 
-  if (keys[" "] && !topPaddleSwinging && gameState === GameState.IN_PLAY) {
+  if (
+    (topShootButtonPressed &&
+      !topPaddleSwinging &&
+      gameState === GameState.IN_PLAY) ||
+    (keys[" "] && !topPaddleSwinging && gameState === GameState.IN_PLAY)
+  ) {
     topPaddleSwinging = true;
   }
 
-  if (keys[" "] && gameState === GameState.SERVING && server === "top") {
+  if (
+    (topShootButtonPressed &&
+      gameState === GameState.SERVING &&
+      server === "top") ||
+    (keys[" "] && gameState === GameState.SERVING && server === "top")
+  ) {
     gameState = GameState.IN_PLAY;
   }
 }
 
 function bottomPlayerMovement() {
-  if (keys["ArrowLeft"] && bottomPaddleX > LEFT_WALL) {
+  if (
+    (bottomLeftButtonPressed && bottomPaddleX > LEFT_WALL) ||
+    (keys["ArrowLeft"] && bottomPaddleX > LEFT_WALL)
+  ) {
     bottomPaddleX -= paddleSpeed;
   }
 
-  if (keys["ArrowRight"] && bottomPaddleX < RIGHT_WALL - PADDLE_WIDTH) {
+  if (
+    (bottomRightButtonPressed && bottomPaddleX < RIGHT_WALL - PADDLE_WIDTH) ||
+    (keys["ArrowRight"] && bottomPaddleX < RIGHT_WALL - PADDLE_WIDTH)
+  ) {
     bottomPaddleX += paddleSpeed;
   }
 
-  if (keys["ArrowUp"] && bottomPaddleY > CENTER_LINE) {
+  if (
+    (bottomUpButtonPressed && bottomPaddleY > CENTER_LINE) ||
+    (keys["ArrowUp"] && bottomPaddleY > CENTER_LINE)
+  ) {
     bottomPaddleY -= paddleSpeed;
   }
-  if (keys["ArrowDown"] && bottomPaddleY < BOTTOM_WALL - PADDLE_HEIGHT) {
+  if (
+    (bottomDownButtonPressed && bottomPaddleY < BOTTOM_WALL - PADDLE_HEIGHT) ||
+    (keys["ArrowDown"] && bottomPaddleY < BOTTOM_WALL - PADDLE_HEIGHT)
+  ) {
     bottomPaddleY += paddleSpeed;
   }
 
-  if (keys["n"] && !bottomPaddleSwinging && gameState === GameState.IN_PLAY) {
+  if (
+    (bottomShootButtonPressed &&
+      !bottomPaddleSwinging &&
+      gameState === GameState.IN_PLAY) ||
+    (keys["n"] && !bottomPaddleSwinging && gameState === GameState.IN_PLAY)
+  ) {
     bottomPaddleSwinging = true;
   }
 
-  if (keys["n"] && gameState === GameState.SERVING && server === "bottom") {
+  if (
+    (bottomShootButtonPressed &&
+      gameState === GameState.SERVING &&
+      server === "bottom") ||
+    (keys["n"] && gameState === GameState.SERVING && server === "bottom")
+  ) {
     gameState = GameState.IN_PLAY;
   }
 }

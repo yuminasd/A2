@@ -9,11 +9,15 @@
 
   <body>
     <div class="controls" style="transform: rotate(180deg)">
-      <button style="width: 100px; height: 38px">Shoot</button>
-      <button style="width: 50px; height: 38px">Up</button>
-      <button style="width: 50px; height: 38px">Down</button>
-      <button style="width: 50px; height: 38px">Left</button>
-      <button style="width: 50px; height: 38px">Right</button>
+      <button id="topShootButton" style="width: 100px; height: 38px">
+        Shoot
+      </button>
+      <button id="topUpButton" style="width: 50px; height: 38px">Up</button>
+      <button id="topDownButton" style="width: 50px; height: 38px">Down</button>
+      <button id="topLeftButton" style="width: 50px; height: 38px">Left</button>
+      <button id="topRightButton" style="width: 50px; height: 38px">
+        Right
+      </button>
     </div>
     <!-- Gameplay Scene -->
     <div class="gameScene">
@@ -37,16 +41,51 @@
 
     <!--GameOver Scene-->
     <div class="gameOver">
+      <img
+        style="position: absolute; width: 100%; z-index: -10"
+        src="./assets/background2.png"
+      />
       <img style="width: 15rem" src="./assets/title.png" alt="Hot Potato" />
-      <button id="startGame">Start Game</button>
+
+      <button class="startGame" id="startGame">Start Game</button>
+      <div class="instructions">
+        <p>Reach 10 Points to Win</p>
+        <p>Assets drawn by Jay (Me), Daniel (Friend)</p>
+        <div class="movement">
+          <p>
+            Player 1:
+            <br />
+            Move: wasd
+            <br />
+            Shoot: Spacebar
+            <br />
+          </p>
+          <p>
+            Player 2:
+            <br />
+            Move: Arrow Keys
+            <br />
+            Shoot: n
+            <br />
+          </p>
+        </div>
+      </div>
     </div>
 
     <div class="controls">
-      <button style="width: 100px; height: 38px">Shoot</button>
-      <button style="width: 50px; height: 38px">Up</button>
-      <button style="width: 50px; height: 38px">Down</button>
-      <button style="width: 50px; height: 38px">Left</button>
-      <button style="width: 50px; height: 38px">Right</button>
+      <button id="bottomShootButton" style="width: 100px; height: 38px">
+        Shoot
+      </button>
+      <button id="bottomUpButton" style="width: 50px; height: 38px">Up</button>
+      <button id="bottomDownButton" style="width: 50px; height: 38px">
+        Down
+      </button>
+      <button id="bottomLeftButton" style="width: 50px; height: 38px">
+        Left
+      </button>
+      <button id="bottomRightButton" style="width: 50px; height: 38px">
+        Right
+      </button>
     </div>
 
     <script src="./script.js"></script>

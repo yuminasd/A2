@@ -1,4 +1,5 @@
 body {
+  font-family: Arial, sans-serif; /* Choose a suitable font family */
   overflow: hidden;
   height: 100vh;
   width: 100vw;
@@ -8,8 +9,24 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: white;
 }
 
+button {
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  font-size: 10px;
+  color: white;
+}
+
+button:active {
+  color: rgba(255, 255, 255, 0.5);
+}
+button:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* InPlay */
 .gameScene {
   display: none;
   position: relative;
@@ -41,7 +58,7 @@ body {
   position: absolute;
   width: 20px;
   height: 20px;
-  background-color: white;
+  background-color: orange;
   border-radius: 50%;
 }
 
@@ -54,17 +71,6 @@ body {
   position: absolute;
   top: 50%;
   width: 100%;
-}
-
-.gameOver {
-  display: block;
-  width: 300px;
-  height: 600px;
-  background-color: #222;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 h1 {
@@ -80,13 +86,34 @@ h1 {
   display: flex;
   justify-content: center;
 }
-button {
-  background-color: rgba(255, 255, 255, 0);
-  border: none;
-  font-size: 10px;
-  color: white;
+
+/* GameOver */
+.gameOver {
+  position: relative;
+  display: block;
+  width: 300px;
+  height: 600px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-button:active {
-  color: rgba(255, 255, 255, 0.5);
+.startGame {
+  font-size: 1rem;
+}
+
+.instructions {
+  color: cadetblue;
+  font-size: 0.5rem;
+  position: absolute;
+  bottom: 4px;
+  text-align: center;
+}
+
+.movement {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
 }
