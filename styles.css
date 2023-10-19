@@ -7,10 +7,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Add this line to center horizontally */
+  justify-content: center;
 }
 
-.pong {
+.gameScene {
   display: none;
   position: relative;
   width: 300px;
