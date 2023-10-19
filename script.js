@@ -1,3 +1,9 @@
+//  Course: SENG 513
+//  Date: OCT 18, 2023
+//  Assignment 2
+//  Name: Jia-Gang Chang
+//  UCID: 30046735
+
 //CONSTANTS-----------------------------------------------------------------------------------------------
 const PADDLE_WIDTH = 50;
 const PADDLE_HEIGHT = 70;
