@@ -16,7 +16,6 @@ Sports/Dodgeball
 
 ### Game Objective:
 
-asd
 Reach 10 points to win the game.
 
 ## Rules of the Game:
