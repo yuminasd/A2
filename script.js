@@ -20,6 +20,25 @@ const BOTTOM_WALL = 600;
 const CENTER_LINE = BOTTOM_WALL / 2;
 
 const menu = document.querySelector(".gameOver");
+const RESTART = document.getElementById("restart");
+RESTART.addEventListener("click", function () {
+  gameState = GameState.GAME_OVER;
+  gameScene.style.display = "none";
+  menu.style.display = "flex";
+  controlsList.forEach(function (controlElement) {
+    controlElement.style.visibility = "hidden";
+  });
+});
+const instructions = document.querySelector(".instructions");
+const INSTRUCTIONS_BUTTON = document.getElementById("instructionsButton");
+INSTRUCTIONS_BUTTON.addEventListener("click", function () {
+  if (instructions.style.display === "none") {
+    instructions.style.display = "block";
+  } else {
+    instructions.style.display = "none";
+  }
+});
+
 const topPaddle = document.getElementById("topPaddle");
 const bottomPaddle = document.getElementById("bottomPaddle");
 const ball = document.querySelector(".ball");
@@ -87,13 +106,13 @@ function initializeGame() {
   topPaddleX = 150;
   topPaddleY = 100;
   topPaddleSwinging = false;
-  topPaddleSwingDuration = 500;
+  topPaddleSwingDuration = 2000;
   topPaddleCooldownActive = false;
   //bottomPaddle
   bottomPaddleX = 150;
   bottomPaddleY = 500;
   bottomPaddleSwinging = false;
-  bottomPaddleSwingDuration = 200;
+  bottomPaddleSwingDuration = 2000;
   bottomPaddleCooldownActive = false;
 
   //Ball
@@ -103,6 +122,7 @@ function initializeGame() {
   ballSpeedY = 5;
   bottomPaddlePoints = 0;
   topPaddlePoints = 0;
+  updateScores();
   gameState = GameState.SERVING;
   server = "bottom";
 }
@@ -195,10 +215,11 @@ bottomRightButton.addEventListener("mouseup", function () {
 });
 
 //STATE MANAGER ----------------------------------------------------------------------------------------------
+//There are 3 states to the game:
 const GameState = {
-  SERVING: "serving",
-  IN_PLAY: "inPlay",
-  GAME_OVER: "gameOver",
+  SERVING: "serving", //Player that loses points start with the ball. Press shoot to change to next state
+  IN_PLAY: "inPlay", //Dodge the ball or hit it with shoot button
+  GAME_OVER: "gameOver", // menu interactions
 };
 
 let gameState = GameState.GAME_OVER; // Initial game state is in the loading screen
@@ -225,12 +246,13 @@ function serve_handlePaddles() {
 }
 
 function serve_updateBall() {
+  //ball will follow the server in this state
   if (server === "bottom") {
     ballX = bottomPaddleX + 20;
-    ballY = bottomPaddleY + 30;
+    ballY = bottomPaddleY - 30;
   } else {
     ballX = topPaddleX + 20;
-    ballY = topPaddleY + 30;
+    ballY = topPaddleY + 90;
   }
 }
 
@@ -293,13 +315,14 @@ function handleCollisions() {
       setTimeout(() => {
         topPaddleCooldownActive = false; // Deactivate the paddle collision cooldown after 200 milliseconds
       }, PADDLE_COLLISION_COOLDOWN);
+    } else {
+      //hit player so lose a point
+      gameState = GameState.SERVING;
+      server = "top";
+      ballSpeedY = 5;
+      bottomPaddlePoints++;
+      updateScores();
     }
-    // else {
-    //   //hit player so lose a point
-    //   gameState = GameState.SERVING;
-    //   server = "top";
-    //   bottomPaddlePoints++;
-    // }
   }
 
   if (
@@ -311,37 +334,38 @@ function handleCollisions() {
       setTimeout(() => {
         bottomPaddleCooldownActive = false;
       }, PADDLE_COLLISION_COOLDOWN);
+    } else {
+      //hit player so lose a point
+      gameState = GameState.SERVING;
+      server = "bottom";
+      ballSpeedY = -5;
+      topPaddlePoints++;
+      updateScores();
     }
-    // else {
-    //   //hit player so lose a point
-    //   gameState = GameState.SERVING;
-    //   server = "bottom";
-    //   topPaddlePoints++;
-    // }
   }
   // Ball collision with top and bottom walls
   if (ballY < TOP_WALL) {
-    // ballSpeedY = -ballSpeedY;
-    ballX = topPaddleX + 40;
-    ballY = topPaddleY + (PADDLE_HEIGHT - 5);
-    ballSpeedX = 2;
-    ballSpeedY = -5;
-    gameState = GameState.SERVING;
-    server = "top";
-    topPaddlePoints++;
-    updateScores();
+    ballSpeedY = -ballSpeedY;
+    // ballX = topPaddleX + 40;
+    // ballY = topPaddleY + (PADDLE_HEIGHT - 5);
+    // ballSpeedX = 2;
+    // ballSpeedY = -5;
+    // gameState = GameState.SERVING;
+    // server = "top";
+    // topPaddlePoints++;
+    // updateScores();
   }
 
   if (ballY >= BOTTOM_WALL - 10) {
-    // ballSpeedY = -ballSpeedY;
-    ballX = bottomPaddleX + 40;
-    ballY = bottomPaddleY - (PADDLE_HEIGHT - 5);
-    ballSpeedX = 2;
-    ballSpeedY = 5;
-    gameState = GameState.SERVING;
-    server = "bottom";
-    bottomPaddlePoints++;
-    updateScores();
+    ballSpeedY = -ballSpeedY;
+    // ballX = bottomPaddleX + 40;
+    // ballY = bottomPaddleY - (PADDLE_HEIGHT - 5);
+    // ballSpeedX = 2;
+    // ballSpeedY = 5;
+    // gameState = GameState.SERVING;
+    // server = "bottom";
+    // bottomPaddlePoints++;
+    // updateScores();
   }
 }
 
@@ -353,7 +377,7 @@ function updateScores() {
   if (bottomPaddlePoints === 10) {
     gameState = GameState.GAME_OVER;
     gameScene.style.display = "none";
-    menu.style.display = "block";
+    menu.style.display = "flex";
 
     controlsList.forEach(function (controlElement) {
       controlElement.style.visibility = "hidden";
@@ -362,7 +386,7 @@ function updateScores() {
   if (topPaddlePoints === 10) {
     gameState = GameState.GAME_OVER;
     gameScene.style.display = "none";
-    menu.style.display = "block";
+    menu.style.display = "flex";
 
     controlsList.forEach(function (controlElement) {
       controlElement.style.visibility = "hidden";
