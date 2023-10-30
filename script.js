@@ -9,7 +9,8 @@ const PADDLE_WIDTH = 50;
 const PADDLE_HEIGHT = 70;
 
 const COLLISION_SQUARE = 20;
-const PADDLE_COLLISION_COOLDOWN = 800; // 200 ms
+const PADDLE_COLLISION_COOLDOWN = 800; // the time before you can swing again
+const PADDLE_SWINGING_TIME = 400;
 
 const BALL_SIZE = 10;
 
@@ -78,6 +79,7 @@ let bottomPaddleY;
 let topPaddleSwinging;
 let topPaddleSwingDuration; // Time the swing state has been active (in milliseconds)
 let topPaddleCooldownActive; // Flag to track if the paddle collision cooldown is active
+let canTopPaddleSwing;
 
 let topShootButtonPressed;
 let topUpButtonPressed;
@@ -88,6 +90,7 @@ let topRightButtonPressed;
 let bottomPaddleSwinging;
 let bottomPaddleSwingDuration;
 let bottomPaddleCooldownActive;
+let canBottomPaddleSwing;
 
 let bottomShootButtonPressed;
 let bottomUpButtonPressed;
@@ -100,35 +103,40 @@ let ballY;
 let ballSpeedX;
 let ballSpeedY;
 
+let server; // player to shoot the ball
+
 function initializeGame() {
   paddleSpeed = 10;
-  //TopPaddle
-  topPaddleX = 150;
-  topPaddleY = 100;
-  topPaddleSwinging = false;
-  topPaddleSwingDuration = 2000;
-  topPaddleCooldownActive = false;
-  //bottomPaddle
-  bottomPaddleX = 150;
-  bottomPaddleY = 500;
-  bottomPaddleSwinging = false;
-  bottomPaddleSwingDuration = 2000;
-  bottomPaddleCooldownActive = false;
+  initializePlayerPosition();
 
   //Ball
   ballX = 190;
   ballY = 390;
   ballSpeedX = 2;
-  ballSpeedY = 5;
+  ballSpeedY = -5;
   bottomPaddlePoints = 0;
   topPaddlePoints = 0;
   updateScores();
   gameState = GameState.SERVING;
   server = "bottom";
 }
-//SERVING STATE----------------------------------------------------------------------------------------------
-let server = "bottom";
 
+function initializePlayerPosition() {
+  //TopPaddle
+  topPaddleX = 150;
+  topPaddleY = 100;
+  topPaddleSwinging = false;
+  topPaddleSwingDuration = 0;
+  topPaddleCooldownActive = false;
+  canTopPaddleSwing = true;
+  //bottomPaddle
+  bottomPaddleX = 150;
+  bottomPaddleY = 500;
+  bottomPaddleSwinging = false;
+  bottomPaddleSwingDuration = 0;
+  bottomPaddleCooldownActive = false;
+  canBottomPaddleSwing = true;
+}
 //POINTS SYSTEM----------------------------------------------------------------------------------------------
 let topPaddlePoints = 0;
 let bottomPaddlePoints = 0;
@@ -178,6 +186,7 @@ topRightButton.addEventListener("mousedown", function () {
 topRightButton.addEventListener("mouseup", function () {
   topRightButtonPressed = false;
 });
+
 //Bottom Mouse Keys
 bottomShootButton.addEventListener("mousedown", function () {
   bottomShootButtonPressed = true;
@@ -266,15 +275,21 @@ function updatePaddles() {
     bottomPaddleSwingDuration += 20;
   }
   // Reset swing state after 2 seconds
-  if (topPaddleSwingDuration >= 500) {
+  if (topPaddleSwingDuration >= PADDLE_COLLISION_COOLDOWN) {
     topPaddleSwinging = false;
     topPaddleSwingDuration = 0;
+    setTimeout(() => {
+      canTopPaddleSwing = true;
+    }, "1000");
   }
 
   // Reset swing state after 2 seconds
-  if (bottomPaddleSwingDuration >= 500) {
+  if (bottomPaddleSwingDuration >= PADDLE_COLLISION_COOLDOWN) {
     bottomPaddleSwinging = false;
     bottomPaddleSwingDuration = 0;
+    setTimeout(() => {
+      canBottomPaddleSwing = true;
+    }, "1000");
   }
   if (!topPaddleSwinging) {
     topPlayerMovement();
@@ -300,72 +315,47 @@ function checkCollision(paddleX, paddleY, paddleWidth, paddleHeight) {
 }
 
 function handleCollisions() {
-  // Ball collision with left and right walls
-  if (ballX <= LEFT_WALL || ballX >= RIGHT_WALL - BALL_SIZE) {
-    ballSpeedX = -ballSpeedX;
-  }
-
   // Collision with paddles
   if (checkCollision(topPaddleX, topPaddleY, PADDLE_WIDTH, PADDLE_HEIGHT)) {
+    //Collide with Paddle while it's swinging
     if (topPaddleSwinging && !topPaddleCooldownActive) {
-      // Ball speed increases when colliding with a swinging paddle
       ballSpeedY = -ballSpeedY * 1.1;
-      topPaddleCooldownActive = true;
-
-      setTimeout(() => {
-        topPaddleCooldownActive = false; // Deactivate the paddle collision cooldown after 200 milliseconds
-      }, PADDLE_COLLISION_COOLDOWN);
     } else {
       //hit player so lose a point
       gameState = GameState.SERVING;
+      initializePlayerPosition();
       server = "top";
       ballSpeedY = 5;
       bottomPaddlePoints++;
       updateScores();
     }
-  }
-
-  if (
+  } else if (
     checkCollision(bottomPaddleX, bottomPaddleY, PADDLE_WIDTH, PADDLE_HEIGHT)
   ) {
+    //Collide with Paddle while it's swinging
     if (bottomPaddleSwinging && !bottomPaddleCooldownActive) {
       ballSpeedY = -ballSpeedY * 1.1;
-      bottomPaddleCooldownActive = true;
-      setTimeout(() => {
-        bottomPaddleCooldownActive = false;
-      }, PADDLE_COLLISION_COOLDOWN);
     } else {
       //hit player so lose a point
       gameState = GameState.SERVING;
+      initializePlayerPosition();
       server = "bottom";
       ballSpeedY = -5;
       topPaddlePoints++;
       updateScores();
     }
   }
-  // Ball collision with top and bottom walls
-  if (ballY < TOP_WALL) {
-    ballSpeedY = -ballSpeedY;
-    // ballX = topPaddleX + 40;
-    // ballY = topPaddleY + (PADDLE_HEIGHT - 5);
-    // ballSpeedX = 2;
-    // ballSpeedY = -5;
-    // gameState = GameState.SERVING;
-    // server = "top";
-    // topPaddlePoints++;
-    // updateScores();
+  // Ball collision with left and right walls
+  else if (ballX <= LEFT_WALL || ballX >= RIGHT_WALL - BALL_SIZE) {
+    ballSpeedX = -ballSpeedX;
   }
 
+  // Ball collision with top and bottom walls
+  else if (ballY < TOP_WALL) {
+    ballSpeedY = -ballSpeedY;
+  }
   if (ballY >= BOTTOM_WALL - 10) {
     ballSpeedY = -ballSpeedY;
-    // ballX = bottomPaddleX + 40;
-    // ballY = bottomPaddleY - (PADDLE_HEIGHT - 5);
-    // ballSpeedX = 2;
-    // ballSpeedY = 5;
-    // gameState = GameState.SERVING;
-    // server = "bottom";
-    // bottomPaddlePoints++;
-    // updateScores();
   }
 }
 
@@ -439,11 +429,13 @@ function topPlayerMovement() {
 
   if (
     (topShootButtonPressed &&
+      canTopPaddleSwing &&
       !topPaddleSwinging &&
       gameState === GameState.IN_PLAY) ||
     (keys[" "] && !topPaddleSwinging && gameState === GameState.IN_PLAY)
   ) {
     topPaddleSwinging = true;
+    canTopPaddleSwing = false;
   }
 
   if (
@@ -486,11 +478,13 @@ function bottomPlayerMovement() {
 
   if (
     (bottomShootButtonPressed &&
+      canBottomPaddleSwing &&
       !bottomPaddleSwinging &&
       gameState === GameState.IN_PLAY) ||
     (keys["n"] && !bottomPaddleSwinging && gameState === GameState.IN_PLAY)
   ) {
     bottomPaddleSwinging = true;
+    canBottomPaddleSwing = false;
   }
 
   if (
@@ -516,14 +510,18 @@ function draw() {
   // Change paddle appearance based on swing state
   if (topPaddleSwinging) {
     topPaddle.classList.add("swinging");
+    topPaddle.style.backgroundColor = "rgba(255, 0, 0, .5)";
   } else {
     topPaddle.classList.remove("swinging");
+    topPaddle.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
   }
 
   if (bottomPaddleSwinging) {
     bottomPaddle.classList.add("swinging");
+    bottomPaddle.style.backgroundColor = "rgba(255, 0, 0, .5)";
   } else {
     bottomPaddle.classList.remove("swinging");
+    bottomPaddle.style.backgroundColor = "rgba(0, 0, 0, 0.1)";
   }
 }
 

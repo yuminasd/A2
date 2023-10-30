@@ -64,8 +64,8 @@ button:hover {
   background-color: red;
 
   background-image: url(./assets/ImpEffect.gif);
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Do not repeat the image */
+  background-position: center;
+  background-repeat: no-repeat;
   background-size: cover;
   z-index: 289;
 }
