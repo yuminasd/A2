@@ -36,6 +36,10 @@ This is duplicated for each character key so a total of 10 times.
 #### AI Usage
 I used AI to discuss if I should seperate the playermovement into two functions or 1. ChaptGPT suggested I used two functions `topPlayerMovement()` and `bottomPlayerMovement()` for users and for every function to define if they are topPlayers or bottomPlayers 
 
+\
+\
+\
+
 ### Swinging
 Users are able to press the spacebar or n key to swing the ball. If you miss the timing and get hit, oppponent wins a points, the ball states becomes `Serving`, and allowing you to serve the the ball.
 
