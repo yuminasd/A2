@@ -1,6 +1,6 @@
 # Explanation
 
-### Character Movement
+## Character Movement
 
 As you can see in the gameplay you have the ability to move the characters with the keyboard "wasd, spacebar", " arrow keys, n " or with the buttons. This was to account for mobile.
 The way the code is structured looks like this
@@ -42,10 +42,7 @@ This is duplicated for each character key so a total of 10 times.
 
 I used AI to discuss if I should seperate the playermovement into two functions or 1. ChaptGPT suggested I used two functions `topPlayerMovement()` and `bottomPlayerMovement()` for users and for every function to define if they are topPlayers or bottomPlayers
 
-\
-\
-
-### Swinging
+## Swinging
 
 Users are able to press the spacebar or n key to swing the ball. If you miss the timing and get hit, oppponent wins a points, the ball states becomes `Serving`, and allowing you to serve the the ball.
 
