@@ -33,4 +33,48 @@ In the player movement function I then do all the logic handling on the keypress
 This is duplicated for each character key so a total of 10 times
 
 ### Swinging
-Users are able to press the spacebar or n key to swing the ball. What this does is it removes a hitbox from the character and instantiates a new one that basically 
+Users are able to press the spacebar or n key to swing the ball. If you miss the timing and get hit, oppponent wins a points, the ball states becomes `Serving`, and allowing you to serve the the ball.
+
+Here are the constants, I wrote to easily balance the game mechanics:
+
+```
+const COLLISION_SQUARE = 20; // how large a players swing hitbox is
+const PADDLE_COLLISION_COOLDOWN = 800; // the time before you can swing again
+const PADDLE_SWINGING_TIME = 400; //the duration the hitbox is spawned
+```
+
+Each player has a few variables to interact with
+```
+let topPaddleSwinging; // boolean to see if user is swinging
+let topPaddleSwingDuration; // Time the swing state has been active (in milliseconds)
+let topPaddleCooldownActive; // Flag to track swing cooldown
+let canTopPaddleSwing; // bbolean to see if user can swing
+```
+
+We add listeners to the shooting buttons as defined in Player Movement explanation. In the player movement we have two versions of shoot:
+
+If player is in the `InPlay` state set user as swinging and begin all timers
+```
+  if (
+    (topShootButtonPressed &&
+      canTopPaddleSwing &&
+      !topPaddleSwinging &&
+      gameState === GameState.IN_PLAY) ||
+    (keys[" "] && !topPaddleSwinging && gameState === GameState.IN_PLAY)
+  ) {
+    topPaddleSwinging = true;
+    canTopPaddleSwing = false;
+  }
+```
+
+If a player is in the `Serving` state the gameplay goes to `InPlay` state
+```
+  if (
+    (topShootButtonPressed &&
+      gameState === GameState.SERVING &&
+      server === "top") ||
+    (keys[" "] && gameState === GameState.SERVING && server === "top")
+  ) {
+    gameState = GameState.IN_PLAY;
+  }
+  ```
