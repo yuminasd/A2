@@ -9,7 +9,7 @@ const PADDLE_WIDTH = 50;
 const PADDLE_HEIGHT = 70;
 
 const COLLISION_SQUARE = 20;
-const PADDLE_COLLISION_COOLDOWN = 800; // the time before you can swing again
+const PADDLE_COLLISION_COOLDOWN = 400; // the time before you can swing again
 const PADDLE_SWINGING_TIME = 400;
 
 const BALL_SIZE = 10;
@@ -106,7 +106,7 @@ let ballSpeedY;
 let server; // player to shoot the ball
 
 function initializeGame() {
-  paddleSpeed = 10;
+  paddleSpeed = 12;
   initializePlayerPosition();
 
   //Ball
@@ -280,7 +280,7 @@ function updatePaddles() {
     topPaddleSwingDuration = 0;
     setTimeout(() => {
       canTopPaddleSwing = true;
-    }, "1000");
+    }, "500");
   }
 
   // Reset swing state after 2 seconds
@@ -289,7 +289,7 @@ function updatePaddles() {
     bottomPaddleSwingDuration = 0;
     setTimeout(() => {
       canBottomPaddleSwing = true;
-    }, "1000");
+    }, "500");
   }
   if (!topPaddleSwinging) {
     topPlayerMovement();
@@ -318,7 +318,7 @@ function handleCollisions() {
   // Collision with paddles
   if (checkCollision(topPaddleX, topPaddleY, PADDLE_WIDTH, PADDLE_HEIGHT)) {
     //Collide with Paddle while it's swinging
-    if (topPaddleSwinging && !topPaddleCooldownActive) {
+    if (topPaddleSwinging) {
       ballSpeedY = -ballSpeedY * 1.1;
       ballSpeedX = -ballSpeedX * 1.1;
     } else {
@@ -334,7 +334,7 @@ function handleCollisions() {
     checkCollision(bottomPaddleX, bottomPaddleY, PADDLE_WIDTH, PADDLE_HEIGHT)
   ) {
     //Collide with Paddle while it's swinging
-    if (bottomPaddleSwinging && !bottomPaddleCooldownActive) {
+    if (bottomPaddleSwinging) {
       ballSpeedY = -ballSpeedY * 1.1;
       ballSpeedX = -ballSpeedX * 1.1;
     } else {
@@ -432,9 +432,8 @@ function topPlayerMovement() {
   if (
     (topShootButtonPressed &&
       canTopPaddleSwing &&
-      !topPaddleSwinging &&
       gameState === GameState.IN_PLAY) ||
-    (keys[" "] && !topPaddleSwinging && gameState === GameState.IN_PLAY)
+    (keys[" "] && canTopPaddleSwing && gameState === GameState.IN_PLAY)
   ) {
     topPaddleSwinging = true;
     canTopPaddleSwing = false;
@@ -481,9 +480,8 @@ function bottomPlayerMovement() {
   if (
     (bottomShootButtonPressed &&
       canBottomPaddleSwing &&
-      !bottomPaddleSwinging &&
       gameState === GameState.IN_PLAY) ||
-    (keys["n"] && !bottomPaddleSwinging && gameState === GameState.IN_PLAY)
+    (keys["n"] && canBottomPaddleSwing && gameState === GameState.IN_PLAY)
   ) {
     bottomPaddleSwinging = true;
     canBottomPaddleSwing = false;
