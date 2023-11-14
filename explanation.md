@@ -132,7 +132,7 @@ function checkCollision(paddleX, paddleY, paddleWidth, paddleHeight) {
 
 I used ChatGPT to ask about how I should tackle the collisions and it suggested I create a hitbox that changes based on booleans
 
-## States Management
+## State Management
 
 The game hass 3 states, in which i created a constant to represent.
 

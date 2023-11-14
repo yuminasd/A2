@@ -6,6 +6,10 @@ UCID: 30046735
 
 # Hot Potato
 
+### Images:
+
+![alt text](https://github.com/yuminasd/A2-HotPotato/blob/main/assets/preview1.png?raw=true)
+
 ### Target Platform:
 
 Desktop and Mobile
