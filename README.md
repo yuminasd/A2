@@ -9,6 +9,7 @@ UCID: 30046735
 ### Images:
 
 ![alt text](https://github.com/yuminasd/A2-HotPotato/blob/main/assets/preview1.png?raw=true)
+![alt text](https://github.com/yuminasd/A2-HotPotato/blob/main/assets/preview2.png?raw=true)
 
 ### Target Platform:
 
