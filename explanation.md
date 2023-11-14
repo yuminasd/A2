@@ -38,7 +38,7 @@ In the player movement function I then do all the logic handling on the keypress
 
 This is duplicated for each character key so a total of 10 times.
 
-#### AI Usage
+### AI Usage
 
 I used AI to discuss if I should seperate the playermovement into two functions or 1. ChaptGPT suggested I used two functions `topPlayerMovement()` and `bottomPlayerMovement()` for users and for every function to define if they are topPlayers or bottomPlayers
 
@@ -128,6 +128,77 @@ function checkCollision(paddleX, paddleY, paddleWidth, paddleHeight) {
     }
 ```
 
-#### AI Usage
+### AI Usage
 
-I used AI to discuss if I should seperate the playermovement into two functions or 1. ChaptGPT suggested I used two functions `topPlayerMovement()` and `bottomPlayerMovement()` for users and for every function to define if they are topPlayers or bottomPlayers
+I used ChatGPT to ask about how I should tackle the collisions and it suggested I create a hitbox that changes based on booleans
+
+## States Management
+
+The game hass 3 states, in which i created a constant to represent.
+
+```
+const GameState = {
+  SERVING: "serving", //Player that loses points start with the ball. Press shoot to change to next state
+  IN_PLAY: "inPlay", //Dodge the ball or hit it with shoot button
+  GAME_OVER: "gameOver", // menu interactions
+};
+```
+
+Associated is a game state variable which controls which functions get called.
+
+```
+let gameState = GameState.GAME_OVER; // Initial game state is in the loading screen
+```
+
+each state has it's own function that gets repeated every 20ms in here:
+
+```
+//Core Game Loop
+function gameLoop() {
+  switch (gameState) {
+    case GameState.SERVING:
+      handleServingState();
+      break;
+    case GameState.IN_PLAY:
+      handleInPlayState();
+      break;
+    case GameState.GAME_OVER:
+      handleGameOverState();
+      break;
+    default:
+      break;
+  }
+}
+```
+
+To handle state changes, it's done on collision or button presses.
+For example hitting the reset button will change the state to `GAME_OVER`
+
+```
+const RESTART = document.getElementById("restart");
+RESTART.addEventListener("click", function () {
+  gameState = GameState.GAME_OVER;
+  gameScene.style.display = "none";
+  menu.style.display = "flex";
+  controlsList.forEach(function (controlElement) {
+    controlElement.style.visibility = "hidden";
+  });
+});
+```
+
+Or if a player reachs the 10 points
+
+```
+if (topPaddlePoints === 10) {
+    gameState = GameState.GAME_OVER;
+    gameScene.style.display = "none";
+    menu.style.display = "flex";
+
+    controlsList.forEach(function (controlElement) {
+      controlElement.style.visibility = "hidden";
+    });
+```
+
+### AI Usage
+
+I used ChatGPT to ask about how I should handle state management. It suggested I edit the game loop and use booleans to act as a state manager. A glorified switch block :)

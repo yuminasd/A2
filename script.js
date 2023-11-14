@@ -320,6 +320,7 @@ function handleCollisions() {
     //Collide with Paddle while it's swinging
     if (topPaddleSwinging && !topPaddleCooldownActive) {
       ballSpeedY = -ballSpeedY * 1.1;
+      ballSpeedX = -ballSpeedX * 1.1;
     } else {
       //hit player so lose a point
       gameState = GameState.SERVING;
@@ -335,6 +336,7 @@ function handleCollisions() {
     //Collide with Paddle while it's swinging
     if (bottomPaddleSwinging && !bottomPaddleCooldownActive) {
       ballSpeedY = -ballSpeedY * 1.1;
+      ballSpeedX = -ballSpeedX * 1.1;
     } else {
       //hit player so lose a point
       gameState = GameState.SERVING;
